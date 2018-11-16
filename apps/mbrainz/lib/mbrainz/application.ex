@@ -10,8 +10,7 @@ defmodule Mbrainz.Application do
 
     children = []
 
-    opts = [strategy: :one_for_one, name: Foo.Supervisor]
+    opts = [strategy: :one_for_one, name: Mbrainz.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
 end
