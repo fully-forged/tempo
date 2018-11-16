@@ -28,6 +28,18 @@ defmodule Mbrainz.ApiClient do
 
     params = %{query: query, fmt: "json"}
 
-    HTTPClient.json_get(@base_url <> path, @headers, params)
+    case HTTPClient.json_get(@base_url <> path, @headers, params) do
+      %HTTPClient.Response{status_code: status_code, duration: elapsed_us} = response ->
+        Telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
+          action: :search_album,
+          status_code: status_code
+        })
+
+        response
+
+      %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
+        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{action: :search_album})
+        error_response
+    end
   end
 end

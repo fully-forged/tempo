@@ -7,12 +7,13 @@ defmodule HTTPClient do
     @moduledoc false
     defstruct status_code: 100,
               headers: [],
-              body: <<>>
+              body: <<>>,
+              duration: 0
   end
 
   defmodule ErrorResponse do
     @moduledoc false
-    defstruct message: nil
+    defstruct message: nil, duration: 0
   end
 
   def json_get(url, headers \\ [], qs_params \\ []) do
@@ -59,7 +60,9 @@ defmodule HTTPClient do
 
     url_with_qs = url <> "?" <> URI.encode_query(qs_params)
 
-    :httpc.request(:get, {String.to_charlist(url_with_qs), headers}, [], [])
+    :timer.tc(fn ->
+      :httpc.request(:get, {String.to_charlist(url_with_qs), headers}, [], [])
+    end)
     |> process_response
   end
 
@@ -69,7 +72,9 @@ defmodule HTTPClient do
         {String.to_charlist(k), String.to_charlist(v)}
       end)
 
-    :httpc.request(:post, {String.to_charlist(url), headers, content_type, body}, [], [])
+    :timer.tc(fn ->
+      :httpc.request(:post, {String.to_charlist(url), headers, content_type, body}, [], [])
+    end)
     |> process_response
   end
 
@@ -79,7 +84,9 @@ defmodule HTTPClient do
         {String.to_charlist(k), String.to_charlist(v)}
       end)
 
-    :httpc.request(:put, {String.to_charlist(url), headers, content_type, body}, [], [])
+    :timer.tc(fn ->
+      :httpc.request(:put, {String.to_charlist(url), headers, content_type, body}, [], [])
+    end)
     |> process_response
   end
 
@@ -89,11 +96,13 @@ defmodule HTTPClient do
         {String.to_charlist(k), String.to_charlist(v)}
       end)
 
-    :httpc.request(:delete, {String.to_charlist(url), headers, [], []}, [], [])
+    :timer.tc(fn ->
+      :httpc.request(:delete, {String.to_charlist(url), headers, [], []}, [], [])
+    end)
     |> process_response
   end
 
-  defp process_response({:ok, result}) do
+  defp process_response({elapsed_us, {:ok, result}}) do
     {{_, status, _}, headers, body} = result
 
     headers =
@@ -101,10 +110,12 @@ defmodule HTTPClient do
         {List.to_string(k), List.to_string(v)}
       end)
 
-    %Response{status_code: status, headers: headers, body: body}
+    %Response{status_code: status, headers: headers, body: body, duration: to_ms(elapsed_us)}
   end
 
-  defp process_response({:error, reason}) do
-    %ErrorResponse{message: reason}
+  defp process_response({elapsed_us, {:error, reason}}) do
+    %ErrorResponse{message: reason, duration: to_ms(elapsed_us)}
   end
+
+  defp to_ms(us), do: div(us, 1000)
 end
