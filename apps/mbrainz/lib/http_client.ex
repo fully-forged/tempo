@@ -16,6 +16,8 @@ defmodule HTTPClient do
     defstruct message: nil, duration: 0
   end
 
+  @http_options [connect_timeout: 1000, timeout: 5000]
+
   def json_get(url, headers \\ [], qs_params \\ []) do
     case get(url, headers, qs_params) do
       %Response{} = response ->
@@ -61,7 +63,7 @@ defmodule HTTPClient do
     url_with_qs = url <> "?" <> URI.encode_query(qs_params)
 
     :timer.tc(fn ->
-      :httpc.request(:get, {String.to_charlist(url_with_qs), headers}, [], [])
+      :httpc.request(:get, {String.to_charlist(url_with_qs), headers}, @http_options, [])
     end)
     |> process_response
   end
@@ -73,7 +75,12 @@ defmodule HTTPClient do
       end)
 
     :timer.tc(fn ->
-      :httpc.request(:post, {String.to_charlist(url), headers, content_type, body}, [], [])
+      :httpc.request(
+        :post,
+        {String.to_charlist(url), headers, content_type, body},
+        @http_options,
+        []
+      )
     end)
     |> process_response
   end
@@ -85,7 +92,12 @@ defmodule HTTPClient do
       end)
 
     :timer.tc(fn ->
-      :httpc.request(:put, {String.to_charlist(url), headers, content_type, body}, [], [])
+      :httpc.request(
+        :put,
+        {String.to_charlist(url), headers, content_type, body},
+        @http_options,
+        []
+      )
     end)
     |> process_response
   end
@@ -97,7 +109,7 @@ defmodule HTTPClient do
       end)
 
     :timer.tc(fn ->
-      :httpc.request(:delete, {String.to_charlist(url), headers, [], []}, [], [])
+      :httpc.request(:delete, {String.to_charlist(url), headers, [], []}, @http_options, [])
     end)
     |> process_response
   end
