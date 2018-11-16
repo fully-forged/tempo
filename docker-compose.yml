@@ -6,6 +6,30 @@ services:
     command: mix run --no-halt
     networks:
       - tempo
+  influx_db:
+    image: influxdb:1.7.0
+    container_name: tempo_influx_db
+    ports:
+      - 8086:8086
+    networks:
+      - tempo
+  telegraf:
+    image: telegraf:1.8.3
+    container_name: tempo_telegraf
+    ports:
+      - 8125:8125/udp
+    networks:
+      - tempo
+    volumes:
+      - "./config/telegraf.conf:/etc/telegraf/telegraf.conf:ro"
+  chronograf:
+    image: chronograf:1.7.2
+    container_name: tempo_chronograf
+    ports:
+      - 8888:8888
+    networks:
+      - tempo
+    command: chronograf --influxdb-url=http://tempo_influx_db:8086
 
 networks:
   tempo:
