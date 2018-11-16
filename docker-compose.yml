@@ -9,6 +9,18 @@ services:
       - TELEGRAF_PORT=8125
     networks:
       - tempo
+  postgres:
+    image: postgres:10.6-alpine
+    container_name: tempo_postgres
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=tempo
+      - POSTGRES_PASSWORD=tempo
+    networks:
+      - tempo
+    volumes:
+      - "./data/postgres:/var/lib/postgresql/data"
   influx_db:
     image: influxdb:1.7.0
     container_name: tempo_influx_db
