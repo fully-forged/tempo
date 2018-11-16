@@ -4,6 +4,9 @@ services:
   app:
     build: .
     command: mix run --no-halt
+    environment:
+      - TELEGRAF_HOST=tempo_telegraf
+      - TELEGRAF_PORT=8125
     networks:
       - tempo
   influx_db:
