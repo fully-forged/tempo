@@ -19,10 +19,15 @@ defmodule Mbrainz.Album do
     }
   end
 
+  defguardp is_present?(a) when not is_nil(a)
+
   defp extract_date(result) do
-    case Map.get(result, "date") do
-      nil -> :not_available
-      date_string -> Date.from_iso8601!(date_string)
+    with date_string when is_present?(date_string) <- Map.get(result, "date"),
+         {:ok, parsed} <- Date.from_iso8601(date_string) do
+      parsed
+    else
+      _error ->
+        :not_available
     end
   end
 end
