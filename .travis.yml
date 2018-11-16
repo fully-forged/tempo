@@ -5,7 +5,7 @@ otp_release: '21.0'
 env:
   - MIX_ENV=test
 script:
-  - mix do deps.get, test
+  - mix test
 cache:
   directories:
     - _build/test
