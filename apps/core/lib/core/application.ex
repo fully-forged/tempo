@@ -5,7 +5,9 @@ defmodule Core.Application do
 
   def start(_type, args) do
     if Keyword.get(args, :enable_metrics, false) do
+      Core.Metrics.start_vm_stats()
       Core.Metrics.connect()
+      Core.Metrics.attach_telemetry_events()
     end
 
     children = []
