@@ -33,7 +33,7 @@ defmodule Core.Metrics do
     ]
 
     Telemetry.attach_many(
-      "mbrainz-statix",
+      "tempo-core",
       events,
       __MODULE__,
       :send_metric,
