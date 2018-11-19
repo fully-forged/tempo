@@ -4,6 +4,8 @@ services:
   app:
     build: .
     command: mix run --no-halt
+    container_name: tempo_app
+    hostname: tempo_app
     environment:
       - TELEGRAF_HOST=tempo_telegraf
       - TELEGRAF_PORT=8125
@@ -12,6 +14,7 @@ services:
   postgres:
     image: postgres:10.6-alpine
     container_name: tempo_postgres
+    hostname: tempo_postgres
     ports:
       - 5433:5432
     environment:
@@ -24,6 +27,7 @@ services:
   influx_db:
     image: influxdb:1.7.0
     container_name: tempo_influx_db
+    hostname: tempo_influx_db
     ports:
       - 8086:8086
     networks:
@@ -33,6 +37,7 @@ services:
   telegraf:
     image: telegraf:1.8.3
     container_name: tempo_telegraf
+    hostname: tempo_telegraf
     ports:
       - 8125:8125/udp
     networks:
@@ -42,6 +47,7 @@ services:
   chronograf:
     image: chronograf:1.7.2
     container_name: tempo_chronograf
+    hostname: tempo_chronograf
     ports:
       - 8888:8888
     networks:
@@ -50,6 +56,7 @@ services:
   kapacitor:
     image: kapacitor:1.5.1
     container_name: tempo_kapacitor
+    hostname: tempo_kapacitor
     ports:
       - 9092:9092
     networks:
