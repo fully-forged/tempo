@@ -47,6 +47,15 @@ services:
     networks:
       - tempo
     command: chronograf --influxdb-url=http://tempo_influx_db:8086
+  kapacitor:
+    image: kapacitor:1.5.1
+    container_name: tempo_kapacitor
+    ports:
+      - 9092:9092
+    networks:
+      - tempo
+    environment:
+      - KAPACITOR_INFLUXDB_0_URLS_0=http://tempo_influx_db:8086
 
 networks:
   tempo:
