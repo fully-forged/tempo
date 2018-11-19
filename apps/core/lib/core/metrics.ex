@@ -37,35 +37,35 @@ defmodule Core.Metrics do
       events,
       __MODULE__,
       :send_metric,
-      nil
+      Engine
     )
   end
 
-  def send_metric([:core, :runtime, measurement], value, meta, _config) do
+  def send_metric([:core, :runtime, measurement], value, meta, engine) do
     case meta.type do
       :counter ->
-        Engine.increment("core_#{measurement}", value)
+        engine.increment("core_#{measurement}", value)
 
       :gauge ->
-        Engine.gauge("core_#{measurement}", value)
+        engine.gauge("core_#{measurement}", value)
 
       :timing ->
-        Engine.timing("core_#{measurement}", value)
+        engine.timing("core_#{measurement}", value)
     end
   end
 
-  def send_metric([:core, :runtime, measurement, field], value, meta, _config) do
+  def send_metric([:core, :runtime, measurement, field], value, meta, engine) do
     opts = metric_opts(meta)
 
     case meta.type do
       :counter ->
-        Engine.increment("core_#{measurement}.#{field}", value, opts)
+        engine.increment("core_#{measurement}.#{field}", value, opts)
 
       :gauge ->
-        Engine.gauge("core_#{measurement}.#{field}", value, opts)
+        engine.gauge("core_#{measurement}.#{field}", value, opts)
 
       :timing ->
-        Engine.timing("core_#{measurement}.#{field}", value, opts)
+        engine.timing("core_#{measurement}.#{field}", value, opts)
     end
   end
 
