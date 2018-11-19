@@ -63,6 +63,68 @@ defmodule MbrainzTest do
         }
       }
     end
+
+    def get_artworks("76df3287-6cda-33eb-8e9a-044b5e15ffdd") do
+      %HTTPClient.Response{
+        body: %{
+          "images" => [
+            %{
+              "approved" => true,
+              "back" => false,
+              "comment" => "",
+              "edit" => 17_462_565,
+              "front" => true,
+              "id" => "829521842",
+              "image" =>
+                "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/829521842.jpg",
+              "thumbnails" => %{
+                "large" =>
+                  "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/829521842-500.jpg",
+                "small" =>
+                  "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/829521842-250.jpg"
+              },
+              "types" => ["Front"]
+            },
+            %{
+              "approved" => true,
+              "back" => true,
+              "comment" => "",
+              "edit" => 24_923_554,
+              "front" => false,
+              "id" => "5769317885",
+              "image" =>
+                "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/5769317885.jpg",
+              "thumbnails" => %{
+                "large" =>
+                  "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/5769317885-500.jpg",
+                "small" =>
+                  "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/5769317885-250.jpg"
+              },
+              "types" => ["Back"]
+            },
+            %{
+              "approved" => true,
+              "back" => false,
+              "comment" => "",
+              "edit" => 24_923_552,
+              "front" => false,
+              "id" => "5769316809",
+              "image" =>
+                "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/5769316809.jpg",
+              "thumbnails" => %{
+                "large" =>
+                  "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/5769316809-500.jpg",
+                "small" =>
+                  "http://coverartarchive.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd/5769316809-250.jpg"
+              },
+              "types" => ["Medium"]
+            }
+          ],
+          "release" => "http://musicbrainz.org/release/76df3287-6cda-33eb-8e9a-044b5e15ffdd"
+        },
+        status_code: 200
+      }
+    end
   end
 
   describe "get_albums/1,2,3" do
@@ -72,6 +134,16 @@ defmodule MbrainzTest do
 
       assert {:ok, [album]} = Mbrainz.search_album("Bohemian Rhapsody", [exact_match: true], ctx)
       assert album.title == "Bohemian Rhapsody / I’m in Love With My Car"
+    end
+  end
+
+  describe "get_artwork/1,2" do
+    @tag :unit
+    test "it returns artworks" do
+      ctx = Mbrainz.Context.override(:api_client, ApiClient)
+
+      assert {:ok, artworks} = Mbrainz.get_artworks("76df3287-6cda-33eb-8e9a-044b5e15ffdd", ctx)
+      assert Enum.count(artworks) == 3
     end
   end
 end

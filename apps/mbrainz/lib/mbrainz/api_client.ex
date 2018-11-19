@@ -6,6 +6,7 @@ defmodule Mbrainz.ApiClient do
   """
 
   @base_url "https://musicbrainz.org/ws/2"
+  @coverart_base_url "https://coverartarchive.org"
   @user_agent "Tempo music library management"
   @headers %{"User-Agent" => @user_agent}
 
@@ -39,6 +40,27 @@ defmodule Mbrainz.ApiClient do
 
       %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
         Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{action: :search_album})
+        error_response
+    end
+  end
+
+  @doc """
+  Given a Mbrainz album id, return relevant artworks.
+  """
+  def get_artworks(album_id) do
+    path = "/release/#{album_id}"
+
+    case HTTPClient.json_get(@coverart_base_url <> path, @headers) do
+      %HTTPClient.Response{status_code: status_code, duration: elapsed_us} = response ->
+        Telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
+          action: :get_artworks,
+          status_code: status_code
+        })
+
+        response
+
+      %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
+        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{action: :get_artworks})
         error_response
     end
   end
