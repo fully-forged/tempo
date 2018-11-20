@@ -2,8 +2,18 @@ language: elixir
 elixir:
   - 1.7
 otp_release: '21.0'
+services:
+  - postgresql
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
+before_script:
+  - psql -c 'create database mgmt_test;' -U postgres
 env:
-  - MIX_ENV=test
+  - MIX_ENV=test POSTGRES_USER=postgres POSTGRES_PASSWORD="" POSTGRES_HOST=localhost
 script:
   - mix test
 cache:
