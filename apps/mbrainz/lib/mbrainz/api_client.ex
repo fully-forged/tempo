@@ -33,13 +33,18 @@ defmodule Mbrainz.ApiClient do
       %HTTPClient.Response{status_code: status_code, duration: elapsed_us} = response ->
         Telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
           action: :search_album,
-          status_code: status_code
+          status_code: status_code,
+          params: album_name
         })
 
         response
 
       %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
-        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{action: :search_album})
+        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{
+          action: :search_album,
+          params: album_name
+        })
+
         error_response
     end
   end
@@ -54,13 +59,18 @@ defmodule Mbrainz.ApiClient do
       %HTTPClient.Response{status_code: status_code, duration: elapsed_us} = response ->
         Telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
           action: :get_artworks,
-          status_code: status_code
+          status_code: status_code,
+          params: album_id
         })
 
         response
 
       %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
-        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{action: :get_artworks})
+        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{
+          action: :get_artworks,
+          params: album_id
+        })
+
         error_response
     end
   end

@@ -8,7 +8,7 @@ defmodule Mbrainz.Metrics do
     ]
 
     Telemetry.attach_many(
-      "tempo-mbrainz",
+      "tempo-mbrainz-metrics",
       events,
       __MODULE__,
       :send_metric,
