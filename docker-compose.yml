@@ -9,6 +9,9 @@ services:
     environment:
       - TELEGRAF_HOST=tempo_telegraf
       - TELEGRAF_PORT=8125
+      - POSTGRES_USER=tempo
+      - POSTGRES_PASSWORD=tempo
+      - POSTGRES_HOST=tempo_postgres
     networks:
       - tempo
   postgres:
