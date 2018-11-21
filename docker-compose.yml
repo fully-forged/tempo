@@ -6,6 +6,8 @@ services:
     command: mix run --no-halt
     container_name: tempo_app
     hostname: tempo_app
+    ports:
+      - 4000:4000
     environment:
       - TELEGRAF_HOST=tempo_telegraf
       - TELEGRAF_PORT=8125

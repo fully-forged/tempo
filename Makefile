@@ -5,3 +5,7 @@ docker-shell:
 docker-test:
 	docker-compose exec app mix test
 .PHONY: docker-test
+
+docker-serve:
+	docker-compose exec app mix phx.server
+.PHONY: docker-serve
