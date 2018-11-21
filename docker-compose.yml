@@ -14,6 +14,12 @@ services:
       - POSTGRES_HOST=tempo_postgres
     networks:
       - tempo
+    depends_on:
+      - postgres
+      - influx_db
+      - telegraf
+      - chronograf
+      - kapacitor
   postgres:
     image: postgres:10.6-alpine
     container_name: tempo_postgres

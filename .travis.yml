@@ -1,21 +1,6 @@
-language: elixir
-elixir:
-  - 1.7
-otp_release: '21.0'
+sudo: required
 services:
-  - postgresql
-addons:
-  postgresql: "10"
-  apt:
-    packages:
-      - postgresql-10
-      - postgresql-client-10
-before_script:
-  - psql -c 'create database mgmt_test;' -U postgres
-env:
-  - MIX_ENV=test POSTGRES_USER=postgres POSTGRES_PASSWORD="" POSTGRES_HOST=localhost
+  - docker
 script:
-  - mix test
-cache:
-  directories:
-    - _build/test
+  - docker-compose build
+  - docker-compose run app mix test
