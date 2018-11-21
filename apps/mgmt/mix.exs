@@ -37,7 +37,8 @@ defmodule Mgmt.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.0"},
-      {:postgrex, ">= 0.0.0"}
+      {:postgrex, ">= 0.0.0"},
+      {:core, in_umbrella: true}
     ]
   end
 
