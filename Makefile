@@ -9,3 +9,8 @@ docker-test:
 docker-serve:
 	docker-compose exec app mix phx.server
 .PHONY: docker-serve
+
+clean:
+	docker-compose down
+	rm -rf data/*
+.PHONY: clean
