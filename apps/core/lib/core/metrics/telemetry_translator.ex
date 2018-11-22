@@ -13,18 +13,18 @@ defmodule Core.Metrics.TelemetryTranslator do
   defp do_collect(key, type, value) do
     case key do
       [measurement] ->
-        Telemetry.execute([:core, :runtime, List.to_atom(measurement)], value, %{type: type})
+        Telemetry.execute([:vm, List.to_atom(measurement)], value, %{type: type})
 
       [measurement, field] ->
         Telemetry.execute(
-          [:core, :runtime, List.to_atom(measurement), List.to_atom(field)],
+          [:vm, List.to_atom(measurement), List.to_atom(field)],
           value,
           %{type: type}
         )
 
       [measurement, scheduler_number, field] ->
         Telemetry.execute(
-          [:core, :runtime, List.to_atom(measurement), List.to_atom(field)],
+          [:vm, List.to_atom(measurement), List.to_atom(field)],
           value,
           %{type: type, scheduler_number: List.to_integer(scheduler_number)}
         )

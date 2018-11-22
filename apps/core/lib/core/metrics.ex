@@ -10,30 +10,30 @@ defmodule Core.Metrics do
 
   def attach_telemetry_events do
     events = [
-      [:core, :runtime, :proc_count],
-      [:core, :runtime, :proc_limit],
-      [:core, :runtime, :port_count],
-      [:core, :runtime, :port_limit],
-      [:core, :runtime, :atom_count],
-      [:core, :runtime, :messages_in_queues],
-      [:core, :runtime, :modules],
-      [:core, :runtime, :run_queue],
-      [:core, :runtime, :reductions],
-      [:core, :runtime, :memory, :total],
-      [:core, :runtime, :memory, :procs_used],
-      [:core, :runtime, :memory, :atom_used],
-      [:core, :runtime, :memory, :binary],
-      [:core, :runtime, :memory, :ets],
-      [:core, :runtime, :io, :bytes_in],
-      [:core, :runtime, :io, :bytes_out],
-      [:core, :runtime, :io, :count],
-      [:core, :runtime, :io, :words_reclaimed],
-      [:core, :runtime, :scheduler_wall_time, :active],
-      [:core, :runtime, :scheduler_wall_time, :total]
+      [:vm, :proc_count],
+      [:vm, :proc_limit],
+      [:vm, :port_count],
+      [:vm, :port_limit],
+      [:vm, :atom_count],
+      [:vm, :messages_in_queues],
+      [:vm, :modules],
+      [:vm, :run_queue],
+      [:vm, :reductions],
+      [:vm, :memory, :total],
+      [:vm, :memory, :procs_used],
+      [:vm, :memory, :atom_used],
+      [:vm, :memory, :binary],
+      [:vm, :memory, :ets],
+      [:vm, :io, :bytes_in],
+      [:vm, :io, :bytes_out],
+      [:vm, :io, :count],
+      [:vm, :io, :words_reclaimed],
+      [:vm, :scheduler_wall_time, :active],
+      [:vm, :scheduler_wall_time, :total]
     ]
 
     Telemetry.attach_many(
-      "tempo-core",
+      "tempo-vm",
       events,
       __MODULE__,
       :send_metric,
@@ -41,31 +41,31 @@ defmodule Core.Metrics do
     )
   end
 
-  def send_metric([:core, :runtime, measurement], value, meta, engine) do
+  def send_metric([:vm, measurement], value, meta, engine) do
     case meta.type do
       :counter ->
-        engine.increment("core_#{measurement}", value)
+        engine.increment("vm_#{measurement}", value)
 
       :gauge ->
-        engine.gauge("core_#{measurement}", value)
+        engine.gauge("vm_#{measurement}", value)
 
       :timing ->
-        engine.timing("core_#{measurement}", value)
+        engine.timing("vm_#{measurement}", value)
     end
   end
 
-  def send_metric([:core, :runtime, measurement, field], value, meta, engine) do
+  def send_metric([:vm, measurement, field], value, meta, engine) do
     opts = metric_opts(meta)
 
     case meta.type do
       :counter ->
-        engine.increment("core_#{measurement}.#{field}", value, opts)
+        engine.increment("vm_#{measurement}.#{field}", value, opts)
 
       :gauge ->
-        engine.gauge("core_#{measurement}.#{field}", value, opts)
+        engine.gauge("vm_#{measurement}.#{field}", value, opts)
 
       :timing ->
-        engine.timing("core_#{measurement}.#{field}", value, opts)
+        engine.timing("vm_#{measurement}.#{field}", value, opts)
     end
   end
 
