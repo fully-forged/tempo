@@ -1,3 +1,7 @@
+build:
+	docker-compose build
+.PHONY: build
+
 docker-shell:
 	docker-compose exec app /bin/bash
 .PHONY: docker-shell
