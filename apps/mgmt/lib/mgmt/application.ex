@@ -5,7 +5,11 @@ defmodule Mgmt.Application do
 
   use Application
 
-  def start(_type, _args) do
+  def start(_type, args) do
+    if Keyword.get(args, :enable_metrics, false) do
+      Mgmt.Repo.Metrics.attach_telemetry_events()
+    end
+
     children = [
       Mgmt.Repo
     ]
