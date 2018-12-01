@@ -12,6 +12,9 @@ defmodule Mgmt.MixProject do
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      preferred_cli_env: [
+        test: :test
+      ],
       aliases: aliases(),
       deps: deps()
     ]
