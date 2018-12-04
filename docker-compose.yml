@@ -14,6 +14,7 @@ services:
       - POSTGRES_USER=tempo
       - POSTGRES_PASSWORD=tempo
       - POSTGRES_HOST=tempo_postgres
+      - POSTGRES_PORT=5432
     networks:
       - tempo
     depends_on:

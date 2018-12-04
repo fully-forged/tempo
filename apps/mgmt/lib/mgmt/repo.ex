@@ -9,6 +9,7 @@ defmodule Mgmt.Repo do
       |> Keyword.put(:username, Core.Config.get(:postgres_user))
       |> Keyword.put(:password, Core.Config.get(:postgres_password))
       |> Keyword.put(:hostname, Core.Config.get(:postgres_host))
+      |> Keyword.put(:port, Core.Config.get(:postgres_port, cast_to: :int))
 
     {:ok, new_config}
   end
