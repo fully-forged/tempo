@@ -11,6 +11,7 @@ services:
     environment:
       - TELEGRAF_HOST=tempo_telegraf
       - TELEGRAF_PORT=8125
+      - TELEGRAF_SYSLOG_PORT=6514
       - POSTGRES_USER=tempo
       - POSTGRES_PASSWORD=tempo
       - POSTGRES_HOST=tempo_postgres
@@ -52,6 +53,7 @@ services:
     hostname: tempo_telegraf
     ports:
       - 8125:8125/udp
+      - 6514:6514/udp
     networks:
       - tempo
     volumes:

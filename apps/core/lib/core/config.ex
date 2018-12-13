@@ -39,5 +39,6 @@ defmodule Core.Config do
 
   defp cast(value, :int), do: String.to_integer(value)
   defp cast(value, :atom), do: String.to_existing_atom(value)
+  defp cast(value, :charlist), do: String.to_charlist(value)
   defp cast(value, _type), do: value
 end
