@@ -38,7 +38,7 @@ services:
     volumes:
       - "./data/postgres:/var/lib/postgresql/data"
   influx_db:
-    image: influxdb:1.7.0-alpine
+    image: influxdb:1.7.2-alpine
     container_name: tempo_influx_db
     hostname: tempo_influx_db
     ports:
@@ -48,7 +48,7 @@ services:
     volumes:
       - "./data/influxdb:/var/lib/influxdb"
   telegraf:
-    image: telegraf:1.8.3-alpine
+    image: telegraf:1.9.1-alpine
     container_name: tempo_telegraf
     hostname: tempo_telegraf
     ports:
@@ -68,7 +68,7 @@ services:
       - tempo
     command: chronograf --influxdb-url=http://tempo_influx_db:8086
   kapacitor:
-    image: kapacitor:1.5.1-alpine
+    image: kapacitor:1.5.2-alpine
     container_name: tempo_kapacitor
     hostname: tempo_kapacitor
     ports:
