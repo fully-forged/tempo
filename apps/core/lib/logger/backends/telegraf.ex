@@ -39,22 +39,22 @@ defmodule Logger.Backends.Telegraf do
   ## Helpers
 
   defp configure(options, state \\ %{}) do
-    syslog = Keyword.merge(Application.get_env(:logger, :syslog, []), options)
+    config = Keyword.merge(Application.get_env(:logger, __MODULE__, []), options)
     socket = Keyword.get(options, :socket, Map.get(state, :socket))
-    Application.put_env(:logger, :syslog, syslog)
+    Application.put_env(:logger, __MODULE__, config)
 
     format =
-      syslog
+      config
       |> Keyword.get(:format)
       |> Logger.Formatter.compile()
 
-    level = Keyword.get(syslog, :level)
-    version = Keyword.get(syslog, :version, 1)
-    metadata = Keyword.get(syslog, :metadata, [])
-    host = Keyword.get(syslog, :host, '127.0.0.1')
-    port = Keyword.get(syslog, :port, 514)
-    facility = Keyword.get(syslog, :facility, :local2) |> Utils.facility()
-    appid = Keyword.get(syslog, :appid, :elixir)
+    level = Keyword.get(config, :level)
+    version = Keyword.get(config, :version, 1)
+    metadata = Keyword.get(config, :metadata, [])
+    host = Keyword.get(config, :host, '127.0.0.1')
+    port = Keyword.get(config, :port, 514)
+    facility = Keyword.get(config, :facility, :local2) |> Utils.facility()
+    appid = Keyword.get(config, :appid, :elixir)
     [hostname | _] = String.split("#{:net_adm.localhost()}", ".")
 
     %{

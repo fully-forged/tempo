@@ -11,33 +11,16 @@ import_config "../apps/*/config/config.exs"
 
 config :phoenix, :json_library, Jason
 
-case Mix.env() do
-  :dev ->
-    config :logger,
-      level: :debug,
-      backends: [:console, Logger.Backends.Telegraf]
+config :logger,
+  level: :debug,
+  backends: [:console, Logger.Backends.Telegraf]
 
-    config :logger, :console, format: "[$level] $message\n"
-    # Initialize plugs at runtime for faster development compilation
-    config :phoenix, :plug_init_mode, :runtime
-    # Set a higher stacktrace during development. Avoid configuring such
-    # in production as building large stacktraces may be expensive.
-    config :phoenix, :stacktrace_depth, 20
+config :logger, :console, format: "[$level] $message\n"
 
-  :test ->
-    config :logger, backends: []
+config :logger, Logger.Backends.Telegraf,
+  facility: :local1,
+  appid: "tempo",
+  format: "$message",
+  metadata: :all
 
-  :prod ->
-    config :logger, level: :info
-
-    config :logger, :console,
-      format: "$time $metadata[$level] $message\n",
-      metadata: [:request_id]
-end
-
-# Sample configuration (overrides the imported configuration above):
-#
-#     config :logger, :console,
-#       level: :info,
-#       format: "$date $time [$level] $metadata$message\n",
-#       metadata: [:user_id]
+import_config "#{Mix.env()}.exs"
