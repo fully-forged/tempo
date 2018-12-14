@@ -3,11 +3,11 @@ version: "3"
 services:
   app:
     build: .
-    command: mix run --no-halt
+    command: mix phx.server
     container_name: tempo_app
     hostname: tempo_app
     ports:
-      - 4000:4000
+      - 4001:4000
     environment:
       - TELEGRAF_HOST=tempo_telegraf
       - TELEGRAF_PORT=8125
