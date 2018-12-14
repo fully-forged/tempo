@@ -13,6 +13,10 @@ config :phoenix, :json_library, Jason
 
 case Mix.env() do
   :dev ->
+    config :logger,
+      level: :debug,
+      backends: [:console, Logger.Backends.Telegraf]
+
     config :logger, :console, format: "[$level] $message\n"
     # Initialize plugs at runtime for faster development compilation
     config :phoenix, :plug_init_mode, :runtime
