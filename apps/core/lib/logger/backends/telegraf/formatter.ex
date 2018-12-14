@@ -14,16 +14,25 @@ defmodule Logger.Backends.Telegraf.Formatter do
     } = state
 
     level_num = Utils.level(level)
+
     allowed_metadata = extract_metadata(md, metadata)
 
+    # we hijack proc_id to act as a correlation id,
+    # so if `request_id` is provided in the metadata
+    # we use it, otherwise default to the current process pid
+    proc_id =
+      Keyword.get_lazy(allowed_metadata, :request_id, fn ->
+        :erlang.pid_to_list(self())
+      end)
+
     pre =
-      :io_lib.format('<~B>~B ~s ~s ~s ~p - ', [
+      :io_lib.format('<~B>~B ~s ~s ~s ~s - ', [
         facility ||| level_num,
         version,
         Utils.iso8601_timestamp(ts),
         hostname,
         appid,
-        self()
+        proc_id
       ])
 
     [
