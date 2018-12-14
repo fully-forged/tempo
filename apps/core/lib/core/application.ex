@@ -23,6 +23,7 @@ defmodule Core.Application do
       facility: :local1,
       appid: "tempo",
       format: "$message",
+      metadata: :all,
       host: Core.Config.get(:telegraf_host, cast_to: :charlist),
       port: Core.Config.get(:telegraf_syslog_port, cast_to: :int)
     )
