@@ -59,7 +59,7 @@ services:
     volumes:
       - "./config/telegraf.conf:/etc/telegraf/telegraf.conf:ro"
   chronograf:
-    image: chronograf:1.7.2-alpine
+    image: chronograf:1.7.4-alpine
     container_name: tempo_chronograf
     hostname: tempo_chronograf
     ports:
