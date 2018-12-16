@@ -1,6 +1,4 @@
 defmodule Logger.Backends.Telegraf.Formatter do
-  alias Logger.Backends.Telegraf.Utils
-
   use Bitwise
 
   def format(level, msg, ts, md, state) do
@@ -13,8 +11,7 @@ defmodule Logger.Backends.Telegraf.Formatter do
       hostname: hostname
     } = state
 
-    level_num = Utils.level(level)
-
+    level_num = level(level)
     allowed_metadata = extract_metadata(md, metadata)
 
     # we hijack proc_id to act as a correlation id,
@@ -29,7 +26,7 @@ defmodule Logger.Backends.Telegraf.Formatter do
       :io_lib.format('<~B>~B ~s ~s ~s ~s - ', [
         facility ||| level_num,
         version,
-        Utils.iso8601_timestamp(ts),
+        iso8601_timestamp(ts),
         hostname,
         appid,
         proc_id
@@ -44,6 +41,31 @@ defmodule Logger.Backends.Telegraf.Formatter do
 
   defp extract_metadata(md, :all), do: md
   defp extract_metadata(md, metadata), do: Keyword.take(md, metadata)
+
+  # Lifted from smpallen99/syslog
+
+  def iso8601_timestamp({{year, month, date}, {hour, minute, second, micro}}) do
+    :io_lib.format(
+      "~4..0B-~2..0B-~2..0BT~2..0B:~2..0B:~2..0B.~3..0BZ",
+      [year, month, date, hour, minute, second, micro]
+    )
+    |> to_string
+  end
+
+  defp level(:debug), do: 7
+  defp level(:info), do: 6
+  defp level(:notice), do: 5
+  defp level(:warn), do: 4
+  defp level(:warning), do: 4
+  defp level(:err), do: 3
+  defp level(:error), do: 3
+  defp level(:crit), do: 2
+  defp level(:alert), do: 1
+  defp level(:emerg), do: 0
+  defp level(:panic), do: 0
+
+  defp level(i) when is_integer(i) when i >= 0 and i <= 7, do: i
+  defp level(_bad), do: 3
 
   # Lifted from Logger.Formatter
 

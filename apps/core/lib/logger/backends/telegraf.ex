@@ -8,7 +8,9 @@ defmodule Logger.Backends.Telegraf do
 
   @behaviour :gen_event
 
-  alias Logger.Backends.Telegraf.{Formatter, Utils}
+  alias Logger.Backends.Telegraf.Formatter
+
+  use Bitwise
 
   def init(_) do
     if user = Process.whereis(:user) do
@@ -53,7 +55,7 @@ defmodule Logger.Backends.Telegraf do
     metadata = Keyword.get(config, :metadata, [])
     host = Keyword.get(config, :host, '127.0.0.1')
     port = Keyword.get(config, :port, 514)
-    facility = Keyword.get(config, :facility, :local2) |> Utils.facility()
+    facility = Keyword.get(config, :facility, :local2) |> facility()
     appid = Keyword.get(config, :appid, :elixir)
     [hostname | _] = String.split("#{:net_adm.localhost()}", ".")
 
@@ -77,4 +79,13 @@ defmodule Logger.Backends.Telegraf do
 
     if(socket, do: :gen_udp.send(socket, host, port, packet))
   end
+
+  defp facility(:local0), do: 16 <<< 3
+  defp facility(:local1), do: 17 <<< 3
+  defp facility(:local2), do: 18 <<< 3
+  defp facility(:local3), do: 19 <<< 3
+  defp facility(:local4), do: 20 <<< 3
+  defp facility(:local5), do: 21 <<< 3
+  defp facility(:local6), do: 22 <<< 3
+  defp facility(:local7), do: 23 <<< 3
 end
