@@ -7,6 +7,17 @@ defmodule Mgmt.Library do
 
   alias Mgmt.Library.Album
 
+  def size(ctx \\ Mgmt.Context.new()) do
+    ctx.repo.aggregate(Album, :count, :id)
+  end
+
+  @doc """
+  Searches for an album given the title
+  """
+  def lookup_album(title, ctx \\ Mgmt.Context.new()) do
+    ctx.mbrainz.search_album(title)
+  end
+
   @doc """
   Returns the list of albums.
 

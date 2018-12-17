@@ -1,0 +1,7 @@
+<h2>Error: <%= inspect(@type) %></h2>
+
+<pre>
+  <code>
+    <%= inspect(@reason) %>
+  </code>
+</pre>

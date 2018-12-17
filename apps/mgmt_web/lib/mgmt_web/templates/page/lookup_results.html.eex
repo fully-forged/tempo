@@ -1,0 +1,10 @@
+<h1>Lookup results</h1>
+
+<ul>
+  <%= for result <- @lookup_results do %>
+    <h3>
+      <small><code><%= result.id %></code></small>
+      <%= join_artist_names(result.artists) %> - <%= result.title %>
+    </h3>
+  <% end %>
+</ul>
