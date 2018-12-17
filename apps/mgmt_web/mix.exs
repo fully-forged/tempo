@@ -45,7 +45,8 @@ defmodule MgmtWeb.MixProject do
       {:gettext, "~> 0.11"},
       {:mgmt, in_umbrella: true},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:logster, "~> 0.10"}
     ]
   end
 
