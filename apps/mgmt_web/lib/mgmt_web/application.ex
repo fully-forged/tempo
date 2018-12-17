@@ -5,7 +5,11 @@ defmodule MgmtWeb.Application do
 
   use Application
 
-  def start(_type, _args) do
+  def start(_type, args) do
+    if Keyword.get(args, :enable_metrics, false) do
+      MgmtWeb.Endpoint.Metrics.attach_telemetry_events()
+    end
+
     # List all child processes to be supervised
     children = [
       # Start the endpoint when the application starts

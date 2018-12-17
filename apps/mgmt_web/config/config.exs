@@ -14,7 +14,8 @@ config :mgmt_web, MgmtWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "sp8iDkKHkhpDfGKJwX5uXaLc8dddC461z0a+XEzNbkatcM3jkgLS+CB+1BQVkwki",
   render_errors: [view: MgmtWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: MgmtWeb.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: MgmtWeb.PubSub, adapter: Phoenix.PubSub.PG2],
+  instrumenters: [MgmtWeb.Endpoint.Instrumenter]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -23,10 +23,13 @@ defmodule MgmtWeb.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {MgmtWeb.Application, []},
+      mod: {MgmtWeb.Application, start_args(Mix.env())},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
+
+  defp start_args(:test), do: [enable_metrics: false]
+  defp start_args(_env), do: [enable_metrics: true]
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
