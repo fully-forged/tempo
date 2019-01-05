@@ -31,7 +31,7 @@ defmodule Mbrainz.ApiClient do
 
     case HTTPClient.json_get(@base_url <> path, @headers, params) do
       %HTTPClient.Response{status_code: status_code, duration: elapsed_us} = response ->
-        Telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
+        :telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
           action: :search_album,
           status_code: status_code,
           params: album_name
@@ -40,7 +40,7 @@ defmodule Mbrainz.ApiClient do
         response
 
       %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
-        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{
+        :telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{
           action: :search_album,
           params: album_name
         })
@@ -57,7 +57,7 @@ defmodule Mbrainz.ApiClient do
 
     case HTTPClient.json_get(@coverart_base_url <> path, @headers) do
       %HTTPClient.Response{status_code: status_code, duration: elapsed_us} = response ->
-        Telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
+        :telemetry.execute([:mbrainz, :api, :ok], elapsed_us, %{
           action: :get_artworks,
           status_code: status_code,
           params: album_id
@@ -66,7 +66,7 @@ defmodule Mbrainz.ApiClient do
         response
 
       %HTTPClient.ErrorResponse{duration: elapsed_us} = error_response ->
-        Telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{
+        :telemetry.execute([:mbrainz, :api, :error], elapsed_us, %{
           action: :get_artworks,
           params: album_id
         })

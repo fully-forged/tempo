@@ -7,21 +7,20 @@ defmodule Mbrainz.Metrics do
       [:mbrainz, :api, :error]
     ]
 
-    Telemetry.attach_many(
+    :telemetry.attach_many(
       "tempo-mbrainz-metrics",
       events,
-      __MODULE__,
-      :send_metric,
+      &send_metric/4,
       Engine
     )
   end
 
-  def send_metric([:mbrainz, :api, :ok], duration, meta, engine) do
+  defp send_metric([:mbrainz, :api, :ok], duration, meta, engine) do
     action = Map.get(meta, :action, :unknown)
     engine.timing("mbrainz_api.success", duration, tags: ["action:#{action}"])
   end
 
-  def send_metric([:mbrainz, :api, :error], duration, meta, engine) do
+  defp send_metric([:mbrainz, :api, :error], duration, meta, engine) do
     action = Map.get(meta, :action, :unknown)
     engine.timing("mbrainz_api.error", duration, tags: ["action:#{action}"])
   end

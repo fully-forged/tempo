@@ -32,16 +32,15 @@ defmodule Core.Metrics do
       [:vm, :scheduler_wall_time, :total]
     ]
 
-    Telemetry.attach_many(
+    :telemetry.attach_many(
       "tempo-vm",
       events,
-      __MODULE__,
-      :send_metric,
+      &send_metric/4,
       Engine
     )
   end
 
-  def send_metric([:vm, measurement], value, meta, engine) do
+  defp send_metric([:vm, measurement], value, meta, engine) do
     case meta.type do
       :counter ->
         engine.increment("vm_#{measurement}", value)
@@ -54,7 +53,7 @@ defmodule Core.Metrics do
     end
   end
 
-  def send_metric([:vm, measurement, field], value, meta, engine) do
+  defp send_metric([:vm, measurement, field], value, meta, engine) do
     opts = metric_opts(meta)
 
     case meta.type do

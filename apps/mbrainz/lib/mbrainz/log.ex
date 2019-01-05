@@ -7,16 +7,15 @@ defmodule Mbrainz.Log do
       [:mbrainz, :api, :error]
     ]
 
-    Telemetry.attach_many(
+    :telemetry.attach_many(
       "tempo-mbrainz-log",
       events,
-      __MODULE__,
-      :log,
+      &log/4,
       nil
     )
   end
 
-  def log([:mbrainz, :api, :ok], duration, meta, nil) do
+  defp log([:mbrainz, :api, :ok], duration, meta, nil) do
     status_code = Map.fetch!(meta, :status_code)
     action = Map.get(meta, :action, :unknown)
     params = Map.get(meta, :params, :unknown)
@@ -28,7 +27,7 @@ defmodule Mbrainz.Log do
     end)
   end
 
-  def log([:mbrainz, :api, :error], duration, meta, nil) do
+  defp log([:mbrainz, :api, :error], duration, meta, nil) do
     action = Map.get(meta, :action, :unknown)
     params = Map.get(meta, :params, :unknown)
 

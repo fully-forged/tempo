@@ -6,16 +6,15 @@ defmodule Mgmt.Repo.Metrics do
       [:mgmt, :repo, :query]
     ]
 
-    Telemetry.attach_many(
+    :telemetry.attach_many(
       "tempo-mgmt-repo-metrics",
       events,
-      __MODULE__,
-      :send_metric,
+      &send_metric/4,
       Engine
     )
   end
 
-  def send_metric([:mgmt, :repo, :query], duration_nanosec, meta, engine) do
+  defp send_metric([:mgmt, :repo, :query], duration_nanosec, meta, engine) do
     duration_ms = duration_nanosec / 1_000_000
 
     case meta.result do
